@@ -1,0 +1,40 @@
+<section class="home-hero">
+  <!-- Updated layout -->
+  <div class="hero-copy">
+    <span class="eyebrow">Popular Picks</span>
+    <h1>Fresh dishes made for every appetite</h1>
+    <p>Discover top-rated meals, made with premium ingredients and delivered hot.</p>
+    <div class="hero-actions">
+      <a routerLink="/menu" class="primary">Browse Menu</a>
+      <a routerLink="/cart" class="secondary">Your Cart</a>
+    </div>
+  </div>
+</section>
+
+<section class="popular-section">
+  <div class="section-header">
+    <div>
+      <h2>Popular Dishes</h2>
+      <p>Handpicked favorites from our menu.</p>
+    </div>
+    <a routerLink="/menu" class="view-menu">See full menu</a>
+  </div>
+
+  <div *ngIf="loadingError()" class="error-message">{{ loadingError() }}</div>
+
+  <div class="grid">
+    <article *ngFor="let product of popularProducts()" class="dish-card">
+      <div class="dish-image" [style.backgroundImage]="'url(' + (product.image || product.photo || product.thumbnail || 'https://via.placeholder.com/400') + ')'">
+      </div>
+      <div class="dish-body">
+        <h3>{{ product.title || product.name || 'Delicious Dish' }}</h3>
+        <p>{{ product.description || product.summary || 'A favorite from our kitchen.' }}</p>
+        <div class="dish-footer">
+          <span class="price">${{ product.price || product.priceUsd || 0 }}</span>
+          <span class="category">{{ product.category?.name || product.category?.title || 'Popular' }}</span>
+        </div>
+      </div>
+    </article>
+    <div *ngIf="popularProducts().length === 0" class="empty-state">No popular dishes available yet.</div>
+  </div>
+</section>

@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  padding: 2rem 1.5rem;
+}
+
+.cart-page {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.page-heading h1 {
+  margin: 0;
+  font-size: 2.4rem;
+}
+
+.page-heading p {
+  margin: 0.75rem 0 1.5rem;
+  color: #64748b;
+}
+
+.cart-shell {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.5rem;
+}
+
+.cart-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.message {
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  background: #f8f7ff;
+  color: #334155;
+}
+
+.empty-state {
+  padding: 2rem;
+  border-radius: 22px;
+  background: white;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.2rem;
+  border-radius: 16px;
+  border: none;
+  background: #ff6a24;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cart-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.cart-item .title {
+  font-weight: 700;
+}
+
+.cart-item .meta {
+  margin-top: 0.35rem;
+  color: #64748b;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.actions button {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 12px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.remove {
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cart-summary {
+  display: flex;
+  align-items: start;
+}
+
+.summary-card {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: white;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.summary-card h2 {
+  margin: 0 0 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  color: #475569;
+}
+
+.summary-row.total {
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 1rem;
+}

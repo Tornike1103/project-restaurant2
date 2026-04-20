@@ -1,0 +1,45 @@
+<section class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <h1>{{ isLogin() ? 'Login' : 'Create Account' }}</h1>
+      <p class="subtitle">
+        {{ isLogin() ? 'Access your account to order and manage your cart.' : 'Create an account to save your favorites and checkout faster.' }}
+      </p>
+
+      <div class="toggle-row">
+        <button type="button" class="toggle-button" [class.active]="isLogin()" (click)="isLogin.set(true)">Login</button>
+        <button type="button" class="toggle-button" [class.active]="!isLogin()" (click)="isLogin.set(false)">Sign Up</button>
+      </div>
+
+      <div *ngIf="isLogin()" class="form-row">          <label>Email</label>
+          <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
+
+          <label>Password</label>
+          <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
+
+          <button type="button" class="primary" (click)="login()">Login</button>
+      </div>
+
+      <div *ngIf="!isLogin()" class="form-row">
+          <label>Name</label>
+          <input type="text" class="name" [value]="authName()" (input)="authName.set($any($event.target).value)" />
+
+          <label>Email</label>
+          <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
+
+          <label>Password</label>
+          <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
+
+          <button type="button" class="primary" (click)="register()">Sign Up</button>
+      </div>
+
+      <div class="message" *ngIf="authMessage()">{{ authMessage() }}</div>
+
+      <div *ngIf="token()" class="logged-in">
+          <p>You are logged in.</p>
+          <a routerLink="/menu" class="secondary">Go to Menu</a>
+          <button type="button" class="secondary" (click)="logout()">Logout</button>
+        </div>
+    </div>
+  </div>
+</section>
