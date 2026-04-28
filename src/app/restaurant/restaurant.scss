@@ -45,6 +45,42 @@
   font-size: 1rem;
 }
 
+.notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  background: #10b981;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  font-weight: 600;
+  animation: slideIn 0.3s ease-out, slideOut 0.3s ease-out 2.7s forwards;
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
 .page-content {
   display: grid;
   grid-template-columns: 320px 1fr;

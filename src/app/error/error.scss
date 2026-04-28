@@ -1,0 +1,77 @@
+:host {
+  display: block;
+}
+
+.error-page {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  background: #f8fafc;
+}
+
+.error-card {
+  width: min(100%, 540px);
+  background: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.error-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: #ffedd5;
+  color: #fb923c;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 2.25rem;
+  color: #0f172a;
+}
+
+p {
+  margin: 0 0 2rem;
+  color: #334155;
+  line-height: 1.75;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.error-actions a {
+  padding: 0.95rem 1.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.error-actions a:hover {
+  transform: translateY(-1px);
+}
+
+.error-actions .primary {
+  background: #ff6a24;
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgba(255, 106, 36, 0.18);
+}
+
+.error-actions .secondary {
+  background: #eef2ff;
+  color: #3730a3;
+}

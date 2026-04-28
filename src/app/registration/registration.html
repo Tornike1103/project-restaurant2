@@ -10,19 +10,34 @@
         <button type="button" class="toggle-button" [class.active]="isLogin()" (click)="isLogin.set(true)">Login</button>
         <button type="button" class="toggle-button" [class.active]="!isLogin()" (click)="isLogin.set(false)">Sign Up</button>
       </div>
-
-      <div *ngIf="isLogin()" class="form-row">          <label>Email</label>
+@if(isLogin()){
+      <div class="form-row">          
+        @if(!needsVerification()){
+          <label>Email</label>
           <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
 
           <label>Password</label>
           <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
 
           <button type="button" class="primary" (click)="login()">Login</button>
+        }
+        @if(needsVerification()){
+          <label>Verification Code</label>
+          <p class="subtitle">Check your email for the verification code</p>
+          <input type="text" class="verification-code" placeholder="Enter verification code" [value]="verificationCode()" (input)="verificationCode.set($any($event.target).value)" />
+          <button type="button" class="primary" (click)="verifyEmail()">Verify Email</button>
+        }
       </div>
+    }
+    @if(!isLogin()){
+      <div  class="form-row">
 
-      <div *ngIf="!isLogin()" class="form-row">
-          <label>Name</label>
-          <input type="text" class="name" [value]="authName()" (input)="authName.set($any($event.target).value)" />
+          <label>First Name</label>
+          <input type="text" class="first-name" [value]="authFirstName()" (input)="authFirstName.set($any($event.target).value)" />
+
+          <label>Last Name</label>
+          <input type="text" class="last-name" [value]="authLastName()" (input)="authLastName.set($any($event.target).value)" />
+
 
           <label>Email</label>
           <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
@@ -32,14 +47,17 @@
 
           <button type="button" class="primary" (click)="register()">Sign Up</button>
       </div>
-
-      <div class="message" *ngIf="authMessage()">{{ authMessage() }}</div>
-
-      <div *ngIf="token()" class="logged-in">
+    }
+@if (authMessage()) {
+      <div class="message">{{ authMessage() }}</div>
+}
+@if(token()){
+      <div  class="logged-in">
           <p>You are logged in.</p>
-          <a routerLink="/menu" class="secondary">Go to Menu</a>
+          <a routerLink="/menu" class="secondaryM">Go to Menu</a>
           <button type="button" class="secondary" (click)="logout()">Logout</button>
         </div>
+      }
     </div>
   </div>
 </section>

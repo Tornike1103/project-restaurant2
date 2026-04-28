@@ -6,19 +6,24 @@
 
   <div class="cart-shell">
     <div class="cart-content">
-      <div class="message" *ngIf="authMessage()">{{ authMessage() }}</div>
+@if (authMessage()) {
+      <div class="message">{{ authMessage() }}</div>
+}
 
-      <div *ngIf="!token()" class="empty-state">
+@if (!token()) {
         <p>Please <a routerLink="/auth">login</a> to view and manage your cart.</p>
-      </div>
+}
 
-      <div *ngIf="token() && cartItems().length === 0" class="empty-state">
+@if (token() && cartItems().length === 0) {
         <p>Your cart is empty.</p>
         <a routerLink="/menu" class="primary">Browse Menu</a>
-      </div>
+}
 
-      <div *ngIf="token() && cartItems().length > 0" class="cart-list">
-        <div *ngFor="let item of cartItems()" class="cart-item">
+@if (token() && cartItems().length > 0) {
+        <div class="cart-list">
+          @for (item of cartItems(); track item.id || item.product?.id || $index) {
+            <div class="cart-item-wrapper">
+              <div class="product-image-small" [style.backgroundImage]="'url(' + (item.product?.image || item.image || item.product?.photo || item.photo || item.product?.thumbnail || item.thumbnail || 'https://via.placeholder.com/100') + ')'" title="{{ item.product?.name || item.name || item.title }}"></div>
               <div>
                 <div class="title">{{ item.product?.name || item.name || item.title }}</div>
                 <div class="meta">Price: ${{ item.price || item.product?.price || 0 }}</div>
@@ -29,10 +34,13 @@
                 <button type="button" (click)="changeQuantity(item, 1)">+</button>
               </div>
               <button type="button" class="remove" (click)="removeFromCart(item)">Remove</button>
+            </div>
+          }
         </div>
-      </div>
+}
 
-    <aside class="cart-summary" *ngIf="token() && cartItems().length > 0">
+@if (token() && cartItems().length > 0) {
+      <aside class="cart-summary">
         <div class="summary-card">
           <h2>Order Summary</h2>
           <div class="summary-row">
@@ -46,6 +54,7 @@
           <button type="button" class="primary" (click)="checkout()">Checkout</button>
         </div>
       </aside>
+}
     </div>
   </div>
 </section>

@@ -19,6 +19,8 @@ export class Restaurant {
   authMessage = signal('');
   token = signal(localStorage.getItem('accessToken') ?? '');
   loadingError = signal('');
+  notificationMessage = signal('');
+  showNotification = signal(false);
 
   filteredProducts = computed(() => {
     const term = this.search().toLowerCase();
@@ -100,7 +102,10 @@ export class Restaurant {
 
     this.api.cartAdd({ productId, quantity: 1 }).subscribe({
       next: () => {
-        this.authMessage.set('Product added to cart.');
+        const productName = product.title || product.name || 'Product';
+        this.notificationMessage.set(`✓ ${productName} added to cart!`);
+        this.showNotification.set(true);
+        setTimeout(() => this.showNotification.set(false), 3000);
       },
       error: (error) => {
         this.authMessage.set('Add to cart failed.');

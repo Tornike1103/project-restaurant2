@@ -3,6 +3,9 @@
     <h1>Menu</h1>
     <p>Browse our dishes, filter by category, and add favorites to your cart.</p>
   </div>
+  @if (showNotification()) {
+    <div class="notification">{{ notificationMessage() }}</div>
+  }
 </section>
 
 <section id="menu" class="page-content">
@@ -14,21 +17,28 @@
       <label>Category</label>
       <div class="categories">
         <button type="button" class="pill" [class.active]="selectedCategory() === 'all'" (click)="selectCategory('all')">All</button>
-        <button type="button" class="pill" *ngFor="let category of categories()" [class.active]="selectedCategory() === category.id?.toString()" (click)="selectCategory(category.id?.toString() || '')">
-          {{ category.name || category.title || 'Category' }}
-        </button>
+        @for (category of categories(); track category.id || $index) {
+          <button type="button" class="pill" [class.active]="selectedCategory() === category.id?.toString()" (click)="selectCategory(category.id?.toString() || '')">
+            {{ category.name || category.title || 'Category' }}
+          </button>
+        }
       </div>
       <label>Max price</label>
       <input type="range" class="price-input" min="0" max="100" [value]="priceMax()" (input)="priceMax.set(+($any($event.target).value))" />
       <div class="price-label">Up to ${{ priceMax() }}</div>
-      <div class="message" *ngIf="authMessage()">{{ authMessage() }}</div>
-      <div class="message error" *ngIf="loadingError()">{{ loadingError() }}</div>
+      @if (authMessage()) {
+        <div class="message">{{ authMessage() }}</div>
+      }
+      @if (loadingError()) {
+        <div class="message error">{{ loadingError() }}</div>
+      }
       <div class="hint">Need an account? <a routerLink="/auth">Login / Register</a></div>
     </div>
   </div>
 
   <div class="menu-grid">
-    <article class="product-card" *ngFor="let product of filteredProducts()">
+    @for (product of filteredProducts(); track product.id || $index) {
+    <article class="product-card">
       <div class="product-image" [style.backgroundImage]="'url(' + (product.image || product.photo || product.thumbnail || 'https://via.placeholder.com/400') + ')'"></div>
       <div class="product-body">
         <h3>{{ product.title || product.name || 'Dish' }}</h3>
@@ -39,6 +49,9 @@
         </div>
       </div>
     </article>
-    <div class="empty-grid" *ngIf="filteredProducts().length === 0">No products found with current filters.</div>
+    }
+    @if (filteredProducts().length === 0) {
+      <div class="empty-grid">No products found with current filters.</div>
+    }
   </div>
 </section>

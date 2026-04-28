@@ -6,12 +6,13 @@ import { Injectable } from '@angular/core';
 })
 export class Api {
   baseUrl = 'https://restaurantapi.stepacademy.ge/';
-  apiKey = '6f035f63-b2c6-4f9b-95ef-bd6b74a706d3';
+  // apiKey = '6f035f63-b2c6-4f9b-95ef-bd6b74a706d3';
 
   constructor(private http: HttpClient) {}
 
   private defaultHeaders(includeAuth = false) {
-    let headers = new HttpHeaders({ 'X-API-Key': this.apiKey });
+    // let headers = new HttpHeaders({ 'X-API-Key': this.apiKey });
+    let headers = new HttpHeaders();
     const token = localStorage.getItem('accessToken');
     if (includeAuth && token) {
       headers = headers.set('Authorization', `Bearer ${token}`);

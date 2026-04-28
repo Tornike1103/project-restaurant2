@@ -19,11 +19,13 @@
     </div>
     <a routerLink="/menu" class="view-menu">See full menu</a>
   </div>
-
-  <div *ngIf="loadingError()" class="error-message">{{ loadingError() }}</div>
-
+@if (loadingError()) {
+  <div  class="error-message">{{ loadingError() }}</div>
+}
   <div class="grid">
-    <article *ngFor="let product of popularProducts()" class="dish-card">
+    @for (product of popularProducts(); track $index) {
+    <article  class="dish-card">
+    
       <div class="dish-image" [style.backgroundImage]="'url(' + (product.image || product.photo || product.thumbnail || 'https://via.placeholder.com/400') + ')'">
       </div>
       <div class="dish-body">
@@ -35,6 +37,10 @@
         </div>
       </div>
     </article>
-    <div *ngIf="popularProducts().length === 0" class="empty-state">No popular dishes available yet.</div>
+  }
+  @empty {
+    <div  class="empty-state">No popular dishes available yet.</div>
+  }
   </div>
+  
 </section>

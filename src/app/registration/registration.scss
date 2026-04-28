@@ -83,6 +83,18 @@
   border: none;
   cursor: pointer;
 }
+.secondaryM {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 16px;
+  padding: 0.95rem 1.2rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  margin-left: -1rem;
+}
 
 .primary {
   background: #ff6a24;
@@ -90,7 +102,8 @@
   font-weight: 700;
 }
 
-.secondary {
+.secondary,
+.secondaryM {
   background: #f8fafc;
   color: #334155;
 }
