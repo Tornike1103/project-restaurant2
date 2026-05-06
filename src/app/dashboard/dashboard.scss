@@ -1,0 +1,390 @@
+:host {
+  display: block;
+  background-color: #f1f5f9;
+  min-height: 100vh;
+  font-family: inherit;
+}
+
+// ─── Top nav / header ───────────────────────────────────────────
+.dashboard-header {
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff6a24;
+  }
+}
+
+// ─── Toggle buttons (Categories / Products) ─────────────────────
+.toggle-buttons {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.55rem 1.25rem;
+    border-radius: 999px;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #ff6a24;
+      color: #ff6a24;
+    }
+
+    &.active {
+      background: #ff6a24;
+      color: white;
+      border-color: #ff6a24;
+    }
+  }
+}
+
+// ─── Main content wrapper ────────────────────────────────────────
+.dashboard-body {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+// ─── Section card ────────────────────────────────────────────────
+.section {
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #ff6a24;
+    display: inline-block;
+  }
+}
+
+// ─── Action bar (add button row) ─────────────────────────────────
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+// ─── Form ────────────────────────────────────────────────────────
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.85rem;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.75rem;
+  border: 1px solid #e2e8f0;
+
+  input[type='text'],
+  input[type='number'],
+  input[type='url'],
+  select {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #0f172a;
+    background: white;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #ff6a24;
+      box-shadow: 0 0 0 3px rgba(255, 106, 36, 0.12);
+    }
+  }
+
+  select {
+    cursor: pointer;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #475569;
+
+    &.checkbox-label {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #0f172a;
+      cursor: pointer;
+
+      input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        accent-color: #ff6a24;
+        cursor: pointer;
+      }
+    }
+
+    input[type='range'] {
+      accent-color: #ff6a24;
+      width: 100%;
+      margin-top: 0.2rem;
+    }
+  }
+
+  // save/add button inside the form spans full width
+  button[type='button'],
+  > button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.4rem;
+  background: #ff6a24;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    background: #e85a18;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background: white;
+  color: #475569;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #ff6a24;
+    color: #ff6a24;
+  }
+}
+
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #dbeafe;
+  }
+}
+
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #fee2e2;
+  }
+}
+
+// ─── Items grid (product cards) ──────────────────────────────────
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.item-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  }
+
+  .item-body {
+    padding: 1rem 1.1rem 0.75rem;
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .item-id {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.1rem;
+    border-top: 1px solid #f1f5f9;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .price {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ff6a24;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+  }
+}
+
+// ─── Category list ───────────────────────────────────────────────
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+
+  .cat-id {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    min-width: 28px;
+  }
+
+  .cat-name {
+    flex: 1;
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+
+  .cat-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+}
+
+.badge-static {
+  padding: 0.25rem 0.65rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+// ─── Responsive ──────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+
+    h1 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .dashboard-body {
+    padding: 1rem;
+  }
+
+  .section {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+  }
+
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+}

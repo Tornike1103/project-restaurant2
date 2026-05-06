@@ -54,13 +54,17 @@ export class Cart {
     });
   }
 
-  setToken(value: string) {
+  setToken(value: string, refreshToken?: string) {
     this.token.set(value);
     if (value) {
       localStorage.setItem('accessToken', value);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
       this.loadCart();
     } else {
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       this.cartItems.set([]);
     }
   }

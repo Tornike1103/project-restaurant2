@@ -23,12 +23,16 @@ export class Registration {
 
   constructor(private api: Api) {}
 
-  setToken(value: string) {
+  setToken(value: string, refreshToken?: string) {
     this.token.set(value);
     if (value) {
       localStorage.setItem('accessToken', value);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
     } else {
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   }
 
@@ -40,8 +44,9 @@ export class Registration {
         next: (result) => {
           const payload = result as any;
           const token = payload?.data?.accessToken ?? payload?.accessToken ?? payload?.token ?? payload?.access_token;
+          const refreshToken = payload?.data?.refreshToken ?? payload?.refreshToken ?? payload?.refresh_token;
           if (token) {
-            this.setToken(token);
+            this.setToken(token, refreshToken);
             this.authMessage.set('Login successful. You can now add items to cart.');
             this.needsVerification.set(false);
           } else {
@@ -74,8 +79,9 @@ export class Registration {
         next: (result) => {
           const payload = result as any;
           const token = payload?.data?.accessToken ?? payload?.accessToken ?? payload?.token ?? payload?.access_token;
+          const refreshToken = payload?.data?.refreshToken ?? payload?.refreshToken ?? payload?.refresh_token;
           if (token) {
-            this.setToken(token);
+            this.setToken(token, refreshToken);
             this.authMessage.set('Registration complete. You are now logged in.');
             this.needsVerification.set(false);
           } else {

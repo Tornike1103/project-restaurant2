@@ -20,13 +20,33 @@ export class Api {
     return { headers };
   }
 
-  adminRegister(data: any) {
-    return this.http.post(this.baseUrl + 'api/admin/register', data, this.defaultHeaders());
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
-  adminLogin(data: any) {
-    return this.http.post(this.baseUrl + 'api/admin/login', data);
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
+
+  saveTokens(accessToken: string, refreshToken?: string) {
+    localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+  }
+
+  clearTokens() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+  }
+
+  // adminRegister(data: any) {
+  //   return this.http.post(this.baseUrl + 'api/admin/register', data, this.defaultHeaders());
+  // }
+
+  // adminLogin(data: any) {
+  //   return this.http.post(this.baseUrl + 'api/admin/login', data);
+  // }
 
   authRegister(data: any) {
     return this.http.post(this.baseUrl + 'api/auth/register', data, this.defaultHeaders());
@@ -84,11 +104,11 @@ export class Api {
     return this.http.post(this.baseUrl + 'api/categories', data, this.defaultHeaders(true));
   }
 
-  updateCategory(id: string, data: any) {
+  updateCategory(id: number, data: any) {
     return this.http.put(this.baseUrl + `api/categories/${id}`, data, this.defaultHeaders(true));
   }
 
-  deleteCategory(id: string) {
+  deleteCategory(id: number) {
     return this.http.delete(this.baseUrl + `api/categories/${id}`, this.defaultHeaders(true));
   }
 
@@ -140,3 +160,13 @@ export class Api {
     return this.http.put(this.baseUrl + 'api/users/change-password', data, this.defaultHeaders(true));
   }
 }
+
+
+
+
+
+//https://restaurantapi.stepacademy.ge/api/categories post
+
+// https://restaurantapi.stepacademy.ge/api/categories/1 put
+
+// https://restaurantapi.stepacademy.ge/api/categories/1 delete

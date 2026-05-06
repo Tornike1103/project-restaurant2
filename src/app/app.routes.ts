@@ -26,6 +26,12 @@ export const routes: Routes = [
   loadComponent: () => import('./registration/registration').then((m) => m.Registration),
   
 },
+
+{
+  path: 'admin',
+  loadComponent: () => import('./dashboard/dashboard').then((m) => m.Dashboard),
+  canActivate: [authGuard],
+},
   // { path: 'auth', component: Registration },
   { path: '**', component: ErrorPage },
 ];
