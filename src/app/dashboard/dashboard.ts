@@ -2,6 +2,7 @@ import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Api } from '../services/api';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,7 @@ export class Dashboard {
   constructor(
     private api: Api,
     private cdr: ChangeDetectorRef,
+    private alertService: AlertService,
   ) {}
 
   ngOnInit() {
@@ -29,11 +31,10 @@ export class Dashboard {
   getAllCategorie() {
     this.api.getCategories().subscribe({
       next: (resp: any) => {
-        console.log(resp);
         this.catList = resp.data;
         this.cdr.detectChanges();
       },
-      error: (er) => alert(er.message),
+      error: (er) => this.alertService.error(er.message),
     });
   }
 
@@ -51,25 +52,25 @@ export class Dashboard {
     if (this.textAddBtn == 'add category') {
       if (this.newCatName != '') {
         this.api.createCategory({ name: this.newCatName }).subscribe({
-          next: (resp: any) => {
-            console.log(resp);
+          next: () => {
+            this.alertService.success('Category created successfully!');
             this.cdr.detectChanges();
             this.getAllCategorie();
             this.resetCategoryForm();
           },
-          error: (er) => alert(er.message),
+          error: (er) => this.alertService.error(er.message),
         });
       }
     } else {
       if (this.newCatName != '') {
         this.api.updateCategory(this.catId, { name: this.newCatName }).subscribe({
-          next: (resp: any) => {
-            console.log(resp);
+          next: () => {
+            this.alertService.success('Category updated successfully!');
             this.cdr.detectChanges();
             this.getAllCategorie();
             this.resetCategoryForm();
           },
-          error: (er) => alert(er.message),
+          error: (er) => this.alertService.error(er.message),
         });
       }
     }
@@ -87,19 +88,26 @@ export class Dashboard {
     this.showinputCat = true;
   }
 
-  deleteCat(x: any) {
-    if (x) {
-      this.api.deleteCategory(x).subscribe({
-        next: (resp: any) => {
-          console.log(resp);
-          this.cdr.detectChanges();
-          this.getAllCategorie();
-        },
-        error: (er) => alert(er.message),
-      });
-    } else {
-      return;
-    }
+  async deleteCat(x: any) {
+    if (!x) return;
+
+    const confirmed = await this.alertService.confirm(
+      'Delete Category',
+      'Are you sure you want to delete this category? This action cannot be undone.',
+      'Delete',
+      'Cancel',
+    );
+
+    if (!confirmed) return;
+
+    this.api.deleteCategory(x).subscribe({
+      next: () => {
+        this.alertService.success('Category deleted.');
+        this.cdr.detectChanges();
+        this.getAllCategorie();
+      },
+      error: (er) => this.alertService.error(er.message),
+    });
   }
 
   edit(id: number, name: string) {
@@ -136,11 +144,10 @@ export class Dashboard {
   getAllProducts() {
     this.api.getProducts().subscribe({
       next: (resp: any) => {
-        console.log(resp);
         this.productList = resp.data.products;
         this.cdr.detectChanges();
       },
-      error: (er) => alert(er.message),
+      error: (er) => this.alertService.error(er.message),
     });
   }
 
@@ -168,18 +175,20 @@ export class Dashboard {
     if (this.productBtnText === 'add product') {
       this.api.createProduct(payload).subscribe({
         next: () => {
+          this.alertService.success('Product created successfully!');
           this.getAllProducts();
           this.resetProductForm();
         },
-        error: (er) => alert(er.message),
+        error: (er) => this.alertService.error(er.message),
       });
     } else {
       this.api.updateProduct(this.productId, payload).subscribe({
         next: () => {
+          this.alertService.success('Product updated successfully!');
           this.getAllProducts();
           this.resetProductForm();
         },
-        error: (er) => alert(er.message),
+        error: (er) => this.alertService.error(er.message),
       });
     }
   }
@@ -201,15 +210,25 @@ export class Dashboard {
     };
   }
 
-  deleteProduct(id: string) {
-    if (id) {
-      this.api.deleteProduct(id).subscribe({
-        next: () => this.getAllProducts(),
-        error: (er) => alert(er.message),
-      });
-    } else {
-      return;
-    }
+  async deleteProduct(id: string) {
+    if (!id) return;
+
+    const confirmed = await this.alertService.confirm(
+      'Delete Product',
+      'Are you sure you want to delete this product? This action cannot be undone.',
+      'Delete',
+      'Cancel',
+    );
+
+    if (!confirmed) return;
+
+    this.api.deleteProduct(id).subscribe({
+      next: () => {
+        this.alertService.success('Product deleted.');
+        this.getAllProducts();
+      },
+      error: (er) => this.alertService.error(er.message),
+    });
   }
 
   editProduct(item: any) {

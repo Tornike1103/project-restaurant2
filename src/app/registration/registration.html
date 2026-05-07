@@ -1,58 +1,88 @@
 <section class="auth-page">
   <div class="auth-shell">
     <div class="auth-card">
-      <h1>{{ isLogin() ? 'Login' : 'Create Account' }}</h1>
-      <p class="subtitle">
-        {{ isLogin() ? 'Access your account to order and manage your cart.' : 'Create an account to save your favorites and checkout faster.' }}
-      </p>
+      @if(!isForgotPassword()) {
+        <h1>{{ isLogin() ? 'Login' : 'Create Account' }}</h1>
+        <p class="subtitle">
+          {{ isLogin() ? 'Access your account to order and manage your cart.' : 'Create an account to save your favorites and checkout faster.' }}
+        </p>
 
-      <div class="toggle-row">
-        <button type="button" class="toggle-button" [class.active]="isLogin()" (click)="isLogin.set(true)">Login</button>
-        <button type="button" class="toggle-button" [class.active]="!isLogin()" (click)="isLogin.set(false)">Sign Up</button>
-      </div>
-@if(isLogin()){
-      <div class="form-row">          
-        @if(!needsVerification()){
+        <div class="toggle-row">
+          <button type="button" class="toggle-button" [class.active]="isLogin()" (click)="isLogin.set(true)">Login</button>
+          <button type="button" class="toggle-button" [class.active]="!isLogin()" (click)="isLogin.set(false)">Sign Up</button>
+        </div>
+      } @else {
+        <h1>Reset Password</h1>
+        <p class="subtitle">Enter your email to receive a password reset code.</p>
+      }
+
+@if(!isForgotPassword()) {
+      @if(isLogin()){
+        <div class="form-row">          
+          @if(!needsVerification()){
+            <label>Email</label>
+            <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
+
+            <label>Password</label>
+            <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
+
+            <button type="button" class="primary" (click)="login()">Login</button>
+            <button type="button" class="forgot-link" (click)="isForgotPassword.set(true); resetEmail.set(authEmail())">Forgot Password?</button>
+          }
+          @if(needsVerification()){
+            <label>Verification Code</label>
+            <p class="subtitle">Check your email for the verification code</p>
+            <input type="text" class="verification-code" placeholder="Enter verification code" [value]="verificationCode()" (input)="verificationCode.set($any($event.target).value)" />
+            <button type="button" class="primary" (click)="verifyEmail()">Verify Email</button>
+          }
+        </div>
+      }
+      @if(!isLogin()){
+        <div class="form-row">
+
+            <label>First Name</label>
+            <input type="text" class="first-name" [value]="authFirstName()" (input)="authFirstName.set($any($event.target).value)" />
+
+            <label>Last Name</label>
+            <input type="text" class="last-name" [value]="authLastName()" (input)="authLastName.set($any($event.target).value)" />
+
+
+            <label>Email</label>
+            <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
+
+            <label>Password</label>
+            <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
+
+            <button type="button" class="primary" (click)="register()">Sign Up</button>
+        </div>
+      }
+} @else {
+      <div class="form-row">
+        @if(!isResetStep()) {
           <label>Email</label>
-          <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
+          <input type="email" class="email" placeholder="Enter your email" [value]="resetEmail()" (input)="resetEmail.set($any($event.target).value)" />
+          <button type="button" class="primary" (click)="sendForgotPassword()">Send Reset Code</button>
+        } @else {
+          <label>Reset Code</label>
+          <input type="text" class="reset-code" placeholder="Enter the code from your email" [value]="resetCode()" (input)="resetCode.set($any($event.target).value)" />
 
-          <label>Password</label>
-          <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
+          <label>New Password</label>
+          <input type="password" class="new-password" placeholder="Enter new password" [value]="newPassword()" (input)="newPassword.set($any($event.target).value)" />
 
-          <button type="button" class="primary" (click)="login()">Login</button>
+          <label>Confirm Password</label>
+          <input type="password" class="confirm-password" placeholder="Confirm new password" [value]="newPasswordConfirm()" (input)="newPasswordConfirm.set($any($event.target).value)" />
+
+          <button type="button" class="primary" (click)="resetPasswordSubmit()">Reset Password</button>
         }
-        @if(needsVerification()){
-          <label>Verification Code</label>
-          <p class="subtitle">Check your email for the verification code</p>
-          <input type="text" class="verification-code" placeholder="Enter verification code" [value]="verificationCode()" (input)="verificationCode.set($any($event.target).value)" />
-          <button type="button" class="primary" (click)="verifyEmail()">Verify Email</button>
-        }
+        <button type="button" class="secondary" (click)="cancelForgotPassword()">Back to Login</button>
       </div>
-    }
-    @if(!isLogin()){
-      <div  class="form-row">
+}
 
-          <label>First Name</label>
-          <input type="text" class="first-name" [value]="authFirstName()" (input)="authFirstName.set($any($event.target).value)" />
-
-          <label>Last Name</label>
-          <input type="text" class="last-name" [value]="authLastName()" (input)="authLastName.set($any($event.target).value)" />
-
-
-          <label>Email</label>
-          <input type="email" class="email" [value]="authEmail()" (input)="authEmail.set($any($event.target).value)" />
-
-          <label>Password</label>
-          <input type="password" class="password" [value]="authPassword()" (input)="authPassword.set($any($event.target).value)" />
-
-          <button type="button" class="primary" (click)="register()">Sign Up</button>
-      </div>
-    }
 @if (authMessage()) {
       <div class="message">{{ authMessage() }}</div>
 }
 @if(token()){
-      <div  class="logged-in">
+      <div class="logged-in">
           <p>You are logged in.</p>
           <a routerLink="/menu" class="secondaryM">Go to Menu</a>
           <button type="button" class="secondary" (click)="logout()">Logout</button>

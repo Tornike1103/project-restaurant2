@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, signal, inject } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
 import { Api } from '../services/api';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-mainpage',
@@ -13,11 +14,24 @@ import { Api } from '../services/api';
 export class Mainpage {
   products = signal<any[]>([]);
   loadingError = signal('');
+  private alertService = inject(AlertService);
+  private router = inject(Router);
 
   popularProducts = computed(() => this.products().slice(0, 4));
 
   constructor(private api: Api) {
     this.loadProducts();
+  }
+
+  navigateToCart() {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    
+    if (!accessToken && !refreshToken) {
+      this.alertService.warning('Please log in to view your cart');
+      return;
+    }
+    this.router.navigate(['/cart']);
   }
 
   normalizeData(data: any) {

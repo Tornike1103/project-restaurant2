@@ -1,0 +1,16 @@
+@if (alertService.alert().visible) {
+  <div class="alert-wrapper">
+    <div class="alert" [class]="'alert--' + alertService.alert().type">
+      <span class="alert-icon">
+        @switch (alertService.alert().type) {
+          @case ('success') { ✓ }
+          @case ('error') { ✗ }
+          @case ('warning') { ⚠ }
+          @default { ℹ }
+        }
+      </span>
+      <span class="alert-message">{{ alertService.alert().message }}</span>
+      <button class="alert-close" (click)="alertService.dismiss()">×</button>
+    </div>
+  </div>
+}

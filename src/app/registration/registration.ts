@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api } from '../services/api';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-registration',
@@ -12,6 +13,8 @@ import { Api } from '../services/api';
 })
 export class Registration {
   isLogin = signal(true);
+  isForgotPassword = signal(false);
+  isResetStep = signal(false);
   authFirstName = signal('');
   authLastName = signal('');
   authEmail = signal('');
@@ -19,9 +22,13 @@ export class Registration {
   authMessage = signal('');
   verificationCode = signal('');
   needsVerification = signal(false);
+  resetEmail = signal('');
+  resetCode = signal('');
+  newPassword = signal('');
+  newPasswordConfirm = signal('');
   token = signal(localStorage.getItem('accessToken') ?? '');
 
-  constructor(private api: Api) {}
+  constructor(private api: Api, private alertService: AlertService) {}
 
   setToken(value: string, refreshToken?: string) {
     this.token.set(value);
@@ -134,5 +141,75 @@ export class Registration {
   logout() {
     this.setToken('');
     this.authMessage.set('Logged out.');
+  }
+
+  sendForgotPassword() {
+    this.authMessage.set('');
+    if (!this.resetEmail()) {
+      this.authMessage.set('Please enter your email address.');
+      return;
+    }
+
+    this.api.forgotPassword(this.resetEmail()).subscribe({
+      next: (result) => {
+        localStorage.setItem('resetEmail', this.resetEmail());
+        this.isResetStep.set(true);
+        this.authMessage.set('Reset code sent to your email. Please enter it below.');
+        this.alertService.info('Reset code sent to your email');
+      },
+      error: (error) => {
+        const errorMessage = error?.error?.message || error?.error?.detail || 'Failed to send reset code. Please try again.';
+        this.authMessage.set(errorMessage);
+        this.alertService.error(errorMessage);
+      },
+    });
+  }
+
+  resetPasswordSubmit() {
+    this.authMessage.set('');
+    if (!this.resetCode() || !this.newPassword() || !this.newPasswordConfirm()) {
+      this.authMessage.set('Please fill in all fields.');
+      return;
+    }
+
+    if (this.newPassword() !== this.newPasswordConfirm()) {
+      this.authMessage.set('Passwords do not match.');
+      return;
+    }
+
+    this.api.resetPassword({
+      email: this.resetEmail(),
+      code: this.resetCode(),
+      newPassword: this.newPassword(),
+    }).subscribe({
+      next: (result) => {
+        localStorage.removeItem('resetEmail');
+        this.resetEmail.set('');
+        this.resetCode.set('');
+        this.newPassword.set('');
+        this.newPasswordConfirm.set('');
+        this.isForgotPassword.set(false);
+        this.isResetStep.set(false);
+        this.isLogin.set(true);
+        this.authMessage.set('Password reset successful. You can now login with your new password.');
+        this.alertService.success('Password reset successfully');
+      },
+      error: (error) => {
+        const errorMessage = error?.error?.message || error?.error?.detail || 'Failed to reset password. Please try again.';
+        this.authMessage.set(errorMessage);
+        this.alertService.error(errorMessage);
+      },
+    });
+  }
+
+  cancelForgotPassword() {
+    this.isForgotPassword.set(false);
+    this.isResetStep.set(false);
+    this.resetEmail.set('');
+    this.resetCode.set('');
+    this.newPassword.set('');
+    this.newPasswordConfirm.set('');
+    this.authMessage.set('');
+    this.isLogin.set(true);
   }
 }

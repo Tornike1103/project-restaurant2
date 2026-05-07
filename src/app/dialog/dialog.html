@@ -1,0 +1,19 @@
+@if (alertService.dialog().visible) {
+  <div class="dialog-backdrop" (click)="alertService.resolveDialog(false)">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <div class="dialog-header">
+        <span class="dialog-icon">⚠</span>
+        <h3 class="dialog-title">{{ alertService.dialog().title }}</h3>
+      </div>
+      <p class="dialog-message">{{ alertService.dialog().message }}</p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="alertService.resolveDialog(false)">
+          {{ alertService.dialog().cancelLabel }}
+        </button>
+        <button class="btn-confirm" (click)="alertService.resolveDialog(true)">
+          {{ alertService.dialog().confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

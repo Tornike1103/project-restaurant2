@@ -108,6 +108,22 @@
   color: #334155;
 }
 
+.forgot-link {
+  background: none;
+  border: none;
+  color: #ff6a24;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0.5rem 0;
+  width: auto;
+  display: inline-block;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 .message {
   margin-top: 1rem;
   padding: 1rem 1.2rem;
