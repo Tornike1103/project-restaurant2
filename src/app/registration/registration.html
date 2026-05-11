@@ -58,22 +58,9 @@
       }
 } @else {
       <div class="form-row">
-        @if(!isResetStep()) {
-          <label>Email</label>
-          <input type="email" class="email" placeholder="Enter your email" [value]="resetEmail()" (input)="resetEmail.set($any($event.target).value)" />
-          <button type="button" class="primary" (click)="sendForgotPassword()">Send Reset Code</button>
-        } @else {
-          <label>Reset Code</label>
-          <input type="text" class="reset-code" placeholder="Enter the code from your email" [value]="resetCode()" (input)="resetCode.set($any($event.target).value)" />
-
-          <label>New Password</label>
-          <input type="password" class="new-password" placeholder="Enter new password" [value]="newPassword()" (input)="newPassword.set($any($event.target).value)" />
-
-          <label>Confirm Password</label>
-          <input type="password" class="confirm-password" placeholder="Confirm new password" [value]="newPasswordConfirm()" (input)="newPasswordConfirm.set($any($event.target).value)" />
-
-          <button type="button" class="primary" (click)="resetPasswordSubmit()">Reset Password</button>
-        }
+        <label>Email</label>
+        <input type="email" class="email" placeholder="Enter your email" [value]="resetEmail()" (input)="resetEmail.set($any($event.target).value)" />
+        <button type="button" class="primary" (click)="sendForgotPassword()">Send Reset Link</button>
         <button type="button" class="secondary" (click)="cancelForgotPassword()">Back to Login</button>
       </div>
 }

@@ -3,11 +3,12 @@ import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Alert } from './alert/alert';
 import { Dialog } from './dialog/dialog';
+import { Chat } from './chat/chat';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, Alert, Dialog],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, Alert, Dialog, Chat],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })

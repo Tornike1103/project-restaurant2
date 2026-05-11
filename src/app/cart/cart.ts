@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api } from '../services/api';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,6 +15,9 @@ export class Cart {
   cartItems = signal<any[]>([]);
   authMessage = signal('');
   token = signal(localStorage.getItem('accessToken') ?? '');
+  userEmail = signal(localStorage.getItem('userEmail') ?? '');
+  userName = signal(localStorage.getItem('userName') ?? '');
+  private alertService = inject(AlertService);
 
   totalPrice = computed(() =>
     this.cartItems().reduce(
@@ -105,7 +109,35 @@ export class Cart {
     this.api.checkoutCart({}).subscribe({
       next: () => {
         this.authMessage.set('Checkout complete.');
-        this.loadCart();
+        
+        // Send checkout confirmation email via n8n
+        const cartItemsList = this.cartItems().map(item => 
+          `${item.product?.name || item.name || item.title} x${item.quantity || 1} - $${(item.price || item.product?.price || 0) * (item.quantity || 1)}`
+        ).join('\n');
+        
+        const emailData = {
+          body: {
+            email: this.userEmail(),
+            subject: 'Order Confirmation',
+            message: `Thank you for your order!\n\nOrder Details:\n${cartItemsList}\n\nTotal: $${this.totalPrice()}\n\nWe will prepare your order shortly.`,
+            userName: this.userName(),
+            totalPrice: this.totalPrice(),
+            itemCount: this.cartItems().length,
+            accessToken: this.token(),
+          }
+        };
+
+        this.api.sendCheckoutEmail(emailData).subscribe({
+          next: () => {
+            this.alertService.success('Order confirmation email sent!');
+            this.loadCart();
+          },
+          error: (error) => {
+            console.error('Email send error:', error);
+            this.alertService.warning('Order placed but email could not be sent.');
+            this.loadCart();
+          },
+        });
       },
       error: () => this.authMessage.set('Checkout failed.'),
     });

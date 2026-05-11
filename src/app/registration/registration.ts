@@ -14,7 +14,6 @@ import { AlertService } from '../services/alert.service';
 export class Registration {
   isLogin = signal(true);
   isForgotPassword = signal(false);
-  isResetStep = signal(false);
   authFirstName = signal('');
   authLastName = signal('');
   authEmail = signal('');
@@ -23,9 +22,6 @@ export class Registration {
   verificationCode = signal('');
   needsVerification = signal(false);
   resetEmail = signal('');
-  resetCode = signal('');
-  newPassword = signal('');
-  newPasswordConfirm = signal('');
   token = signal(localStorage.getItem('accessToken') ?? '');
 
   constructor(private api: Api, private alertService: AlertService) {}
@@ -40,6 +36,8 @@ export class Registration {
     } else {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
     }
   }
 
@@ -54,6 +52,7 @@ export class Registration {
           const refreshToken = payload?.data?.refreshToken ?? payload?.refreshToken ?? payload?.refresh_token;
           if (token) {
             this.setToken(token, refreshToken);
+            localStorage.setItem('userEmail', this.authEmail());
             this.authMessage.set('Login successful. You can now add items to cart.');
             this.needsVerification.set(false);
           } else {
@@ -89,10 +88,13 @@ export class Registration {
           const refreshToken = payload?.data?.refreshToken ?? payload?.refreshToken ?? payload?.refresh_token;
           if (token) {
             this.setToken(token, refreshToken);
+            localStorage.setItem('userEmail', this.authEmail());
+            localStorage.setItem('userName', `${this.authFirstName()} ${this.authLastName()}`);
             this.authMessage.set('Registration complete. You are now logged in.');
             this.needsVerification.set(false);
           } else {
             this.authMessage.set('Registration complete. Please verify your email to continue.');
+            this.isLogin.set(true);
             this.needsVerification.set(true);
           }
         },
@@ -152,50 +154,12 @@ export class Registration {
 
     this.api.forgotPassword(this.resetEmail()).subscribe({
       next: (result) => {
-        localStorage.setItem('resetEmail', this.resetEmail());
-        this.isResetStep.set(true);
-        this.authMessage.set('Reset code sent to your email. Please enter it below.');
-        this.alertService.info('Reset code sent to your email');
+        this.authMessage.set(`Password reset link has been sent to ${this.resetEmail()}. Please check your email to complete the password reset.`);
+        this.alertService.success('Password reset email sent!');
+        setTimeout(() => this.cancelForgotPassword(), 3000);
       },
       error: (error) => {
-        const errorMessage = error?.error?.message || error?.error?.detail || 'Failed to send reset code. Please try again.';
-        this.authMessage.set(errorMessage);
-        this.alertService.error(errorMessage);
-      },
-    });
-  }
-
-  resetPasswordSubmit() {
-    this.authMessage.set('');
-    if (!this.resetCode() || !this.newPassword() || !this.newPasswordConfirm()) {
-      this.authMessage.set('Please fill in all fields.');
-      return;
-    }
-
-    if (this.newPassword() !== this.newPasswordConfirm()) {
-      this.authMessage.set('Passwords do not match.');
-      return;
-    }
-
-    this.api.resetPassword({
-      email: this.resetEmail(),
-      code: this.resetCode(),
-      newPassword: this.newPassword(),
-    }).subscribe({
-      next: (result) => {
-        localStorage.removeItem('resetEmail');
-        this.resetEmail.set('');
-        this.resetCode.set('');
-        this.newPassword.set('');
-        this.newPasswordConfirm.set('');
-        this.isForgotPassword.set(false);
-        this.isResetStep.set(false);
-        this.isLogin.set(true);
-        this.authMessage.set('Password reset successful. You can now login with your new password.');
-        this.alertService.success('Password reset successfully');
-      },
-      error: (error) => {
-        const errorMessage = error?.error?.message || error?.error?.detail || 'Failed to reset password. Please try again.';
+        const errorMessage = error?.error?.message || error?.error?.detail || 'Failed to send reset email. Please try again.';
         this.authMessage.set(errorMessage);
         this.alertService.error(errorMessage);
       },
@@ -204,11 +168,7 @@ export class Registration {
 
   cancelForgotPassword() {
     this.isForgotPassword.set(false);
-    this.isResetStep.set(false);
     this.resetEmail.set('');
-    this.resetCode.set('');
-    this.newPassword.set('');
-    this.newPasswordConfirm.set('');
     this.authMessage.set('');
     this.isLogin.set(true);
   }

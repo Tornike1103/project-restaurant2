@@ -148,6 +148,11 @@ export class Api {
     return this.http.get(this.baseUrl + 'api/users/profile', this.defaultHeaders(true));
   }
 
+  sendCheckoutEmail(data: any) {
+    const n8nWebhook = 'https://qwerty0900.app.n8n.cloud/webhook-test/101e1527-fd19-4364-9eda-319e4738d51f';
+    return this.http.post(n8nWebhook, data);
+  }
+
   editUser(data: any) {
     return this.http.put(this.baseUrl + 'api/users/edit', data, this.defaultHeaders(true));
   }
